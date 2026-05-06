@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaludLog - Iniciar Sesión</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyan: {
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .type-selected {
+            border-color: #06b6d4 !important;
+            background-color: #ecfeff !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+        }
+        .type-selected-dark {
+            border-color: #06b6d4 !important;
+            background-color: #164e63 !important; /* cyan-900 or similar for dark active */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3) !important;
+        }
+        .icon-selected {
+            background-image: linear-gradient(to bottom right, #22d3ee, #06b6d4) !important;
+            color: white !important;
+        }
+        .text-selected {
+            color: #0891b2 !important;
+        }
+        .dark .text-selected {
+            color: #22d3ee !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-white dark:bg-gray-900 transition-colors flex flex-col font-sans text-gray-800 dark:text-white">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-400 text-white px-6 py-12 rounded-b-3xl shadow-lg relative">
+        <button id="darkModeBtn" class="absolute top-6 right-6 p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors backdrop-blur-sm">
+            <i data-lucide="moon" id="themeIcon" class="w-5 h-5"></i>
+        </button>
+        
+        <div class="text-center mt-8">
+            <div class="flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-4 mx-auto backdrop-blur-sm">
+                <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+            </div>
+            <h1 class="text-4xl mb-2">SaludLog</h1>
+            <p class="text-lg opacity-90">Tu salud, tu control</p>
+        </div>
+    </div>
+
+    <!-- Login Form -->
+    <div class="flex-1 px-6 py-8">
+        <div class="max-w-md mx-auto">
+            <!-- User Type Selection -->
+            <div class="grid grid-cols-2 gap-3 mb-8">
+                <!-- Patient Button -->
+                <button id="patientBtn" class="type-btn flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 type-selected">
+                    <div id="patientIconContainer" class="icon-container flex items-center justify-center w-14 h-14 rounded-full bg-gray-100 dark:bg-gray-700 icon-selected">
+                        <i data-lucide="user" id="patientIcon" class="w-7 h-7 text-gray-500 dark:text-gray-400 text-white"></i>
+                    </div>
+                    <div class="text-center">
+                        <p id="patientText" class="text-type text-selected">Paciente</p>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Seguimiento personal</p>
+                    </div>
+                </button>
+
+                <!-- Doctor Button -->
+                <button id="doctorBtn" class="type-btn flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                    <div id="doctorIconContainer" class="icon-container flex items-center justify-center w-14 h-14 rounded-full bg-gray-100 dark:bg-gray-700">
+                        <i data-lucide="stethoscope" id="doctorIcon" class="w-7 h-7 text-gray-500 dark:text-gray-400"></i>
+                    </div>
+                    <div class="text-center">
+                        <p id="doctorText" class="text-type text-gray-800 dark:text-white">Médico</p>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Panel profesional</p>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Form -->
+            <form id="loginForm" class="space-y-6">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                    <h2 class="text-xl mb-6 text-gray-800 dark:text-white">
+                        Iniciar Sesión
+                    </h2>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm mb-2 text-gray-600 dark:text-gray-400">
+                                Correo electrónico
+                            </label>
+                            <div class="relative">
+                                <div class="absolute left-3 top-1/2 -translate-y-1/2">
+                                    <i data-lucide="mail" class="w-[18px] h-[18px] text-gray-400 dark:text-gray-500"></i>
+                                </div>
+                                <input
+                                    type="email"
+                                    id="emailInput"
+                                    placeholder="tu@email.com"
+                                    class="w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 bg-white border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm mb-2 text-gray-600 dark:text-gray-400">
+                                Contraseña
+                            </label>
+                            <div class="relative">
+                                <div class="absolute left-3 top-1/2 -translate-y-1/2">
+                                    <i data-lucide="lock" class="w-[18px] h-[18px] text-gray-400 dark:text-gray-500"></i>
+                                </div>
+                                <input
+                                    type="password"
+                                    id="passwordInput"
+                                    placeholder="••••••••"
+                                    class="w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 bg-white border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="w-full py-4 bg-gradient-to-r from-cyan-400 to-cyan-500 text-white rounded-xl hover:from-cyan-500 hover:to-cyan-600 transition-all shadow-md font-medium"
+                        >
+                            Ingresar
+                        </button>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <button type="button" class="text-sm text-cyan-600 dark:text-cyan-400 hover:underline">
+                            ¿Olvidaste tu contraseña?
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Sign Up Link -->
+            <div class="text-center mt-6">
+                <p class="text-gray-600 dark:text-gray-400">
+                    ¿No tienes cuenta? 
+                    <button class="text-cyan-600 dark:text-cyan-400 hover:underline">
+                        Regístrate aquí
+                    </button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="px-6 py-6 text-center">
+        <p class="text-xs text-gray-600 dark:text-gray-400">
+            © 2026 SaludLog - Cuidando tu salud preventiva
+        </p>
+    </div>
+
+    <script>
+        // Initialize icons
+        lucide.createIcons();
+
+        // State
+        let darkMode = false;
+        let userType = 'patient';
+
+        // Elements
+        const html = document.documentElement;
+        const darkModeBtn = document.getElementById('darkModeBtn');
+        const themeIcon = document.getElementById('themeIcon');
+        
+        const patientBtn = document.getElementById('patientBtn');
+        const doctorBtn = document.getElementById('doctorBtn');
+        const patientIconContainer = document.getElementById('patientIconContainer');
+        const doctorIconContainer = document.getElementById('doctorIconContainer');
+        const patientText = document.getElementById('patientText');
+        const doctorText = document.getElementById('doctorText');
+        const patientIcon = document.getElementById('patientIcon');
+        const doctorIcon = document.getElementById('doctorIcon');
+        const emailInput = document.getElementById('emailInput');
+
+        const form = document.getElementById('loginForm');
+
+        // Dark mode toggle
+        darkModeBtn.addEventListener('click', () => {
+            darkMode = !darkMode;
+            if (darkMode) {
+                html.classList.add('dark');
+                themeIcon.setAttribute('data-lucide', 'sun');
+            } else {
+                html.classList.remove('dark');
+                themeIcon.setAttribute('data-lucide', 'moon');
+            }
+            lucide.createIcons();
+            updateSelection();
+        });
+
+        // User type selection
+        patientBtn.addEventListener('click', () => {
+            userType = 'patient';
+            emailInput.placeholder = 'tu@email.com';
+            updateSelection();
+        });
+
+        doctorBtn.addEventListener('click', () => {
+            userType = 'doctor';
+            emailInput.placeholder = 'doctor@hospital.com';
+            updateSelection();
+        });
+
+        function updateSelection() {
+            // Reset both
+            patientBtn.classList.remove('type-selected', 'type-selected-dark');
+            doctorBtn.classList.remove('type-selected', 'type-selected-dark');
+            
+            patientIconContainer.classList.remove('icon-selected');
+            doctorIconContainer.classList.remove('icon-selected');
+            
+            patientText.classList.remove('text-selected');
+            doctorText.classList.remove('text-selected');
+
+            patientIcon.style.color = '';
+            doctorIcon.style.color = '';
+
+            // Apply selected
+            const activeBtn = userType === 'patient' ? patientBtn : doctorBtn;
+            const activeIconContainer = userType === 'patient' ? patientIconContainer : doctorIconContainer;
+            const activeText = userType === 'patient' ? patientText : doctorText;
+            const activeIcon = userType === 'patient' ? patientIcon : doctorIcon;
+
+            if (darkMode) {
+                activeBtn.classList.add('type-selected-dark');
+            } else {
+                activeBtn.classList.add('type-selected');
+            }
+            
+            activeIconContainer.classList.add('icon-selected');
+            activeText.classList.add('text-selected');
+            activeIcon.style.color = 'white';
+        }
+
+        // Form submit
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = emailInput.value;
+            const password = document.getElementById('passwordInput').value;
+            if (email && password) {
+                console.log('Login attempt:', { userType, email, password });
+                // Add actual login logic here when needed
+                // window.location.href = '/dashboard/';
+            }
+        });
+    </script>
+</body>
+</html>
