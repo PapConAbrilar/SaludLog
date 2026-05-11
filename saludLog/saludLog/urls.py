@@ -21,4 +21,6 @@ from core import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.login_view, name='login'),
+    path('home/', views.home_view, name='home'),
+    path('api/login/', views.CustomObtainAuthToken.as_view(), name='api_login'),
 ]

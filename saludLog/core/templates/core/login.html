@@ -255,14 +255,43 @@
         }
 
         // Form submit
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = emailInput.value;
             const password = document.getElementById('passwordInput').value;
-            if (email && password) {
-                console.log('Login attempt:', { userType, email, password });
-                // Add actual login logic here when needed
-                // window.location.href = '/dashboard/';
+
+            try {
+                const response = await fetch('/api/login/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: email, // Usamos el email como username para DRF
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Guardar sesión
+                    localStorage.setItem('saludLog_token', data.token);
+                    localStorage.setItem('saludLog_role', data.role);
+                    
+                    // Verificar si el rol coincide con el seleccionado en la UI
+                    if (data.role !== userType) {
+                        alert(`Bienvenido, pero detectamos que eres un ${data.role === 'doctor' ? 'médico' : 'paciente'}. Redirigiendo a tu sección...`);
+                    }
+
+                    // Redirección a la Homepage (solo frontend por ahora)
+                    window.location.href = '/home/';
+                } else {
+                    alert(data.non_field_errors || 'Credenciales inválidas. Por favor intente de nuevo.');
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                alert('Ocurrió un error en la conexión. Intente más tarde.');
             }
         });
     </script>
